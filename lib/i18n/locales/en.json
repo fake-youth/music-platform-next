@@ -1,0 +1,128 @@
+{
+    "common": {
+        "search": "Search",
+        "home": "Home",
+        "library": "Library",
+        "explore": "Explore",
+        "playlists": "Playlists",
+        "likes": "Liked Songs",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout",
+        "login": "Login",
+        "register": "Register",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "back": "Back",
+        "next": "Next",
+        "previous": "Previous",
+        "play": "Play",
+        "pause": "Pause",
+        "shuffle": "Shuffle",
+        "repeat": "Repeat",
+        "volume": "Volume",
+        "mute": "Mute"
+    },
+    "home": {
+        "welcome": "Welcome back",
+        "recentlyPlayed": "Recently Played",
+        "trending": "Trending Now",
+        "newReleases": "New Releases",
+        "topCharts": "Top Charts",
+        "recommendations": "Recommended For You",
+        "genres": "Browse by Genre"
+    },
+    "search": {
+        "placeholder": "What do you want to listen to?",
+        "results": "{{count}} results",
+        "noResults": "No results found for \"{{query}}\"",
+        "filters": "Filters",
+        "sortBy": "Sort by",
+        "genre": "Genre",
+        "duration": "Duration",
+        "allGenres": "All Genres"
+    },
+    "player": {
+        "nowPlaying": "Now Playing",
+        "queue": "Queue",
+        "lyrics": "Lyrics",
+        "addToPlaylist": "Add to Playlist",
+        "share": "Share",
+        "like": "Like",
+        "unlike": "Unlike"
+    },
+    "playlist": {
+        "create": "Create Playlist",
+        "name": "Playlist Name",
+        "description": "Description",
+        "songs": "{{count}} songs",
+        "duration": "{{duration}} minutes",
+        "empty": "This playlist is empty",
+        "addSongs": "Add Songs"
+    },
+    "profile": {
+        "editProfile": "Edit Profile",
+        "followers": "Followers",
+        "following": "Following",
+        "publicPlaylists": "Public Playlists",
+        "recentActivity": "Recent Activity"
+    },
+    "auth": {
+        "email": "Email",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "fullName": "Full Name",
+        "loginTitle": "Welcome Back",
+        "loginSubtitle": "Sign in to continue",
+        "registerTitle": "Create Account",
+        "registerSubtitle": "Join the music community",
+        "forgotPassword": "Forgot Password?",
+        "noAccount": "Don't have an account?",
+        "hasAccount": "Already have an account?",
+        "signUp": "Sign Up",
+        "signIn": "Sign In"
+    },
+    "premium": {
+        "title": "Go Premium",
+        "subtitle": "Unlock the full potential of Music Platform",
+        "free": "Free",
+        "premium": "Premium",
+        "premiumPlus": "Premium+",
+        "currentPlan": "Current Plan",
+        "subscribe": "Subscribe Now",
+        "features": {
+            "noAds": "No Ads",
+            "offlineDownload": "Offline Download",
+            "highQuality": "High Quality Audio",
+            "unlimitedPlaylists": "Unlimited Playlists"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "markAllRead": "Mark all as read",
+        "noNotifications": "No notifications yet",
+        "newFollower": "started following you",
+        "newLike": "liked your playlist",
+        "newComment": "commented on your song"
+    },
+    "comments": {
+        "title": "Comments",
+        "placeholder": "Write a comment...",
+        "post": "Post",
+        "reply": "Reply",
+        "delete": "Delete",
+        "noComments": "No comments yet. Be the first to comment!"
+    },
+    "errors": {
+        "generic": "Something went wrong. Please try again.",
+        "network": "Network error. Please check your connection.",
+        "unauthorized": "Please log in to continue.",
+        "notFound": "The requested resource was not found."
+    }
+}

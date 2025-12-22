@@ -1,0 +1,128 @@
+{
+    "common": {
+        "search": "Cari",
+        "home": "Beranda",
+        "library": "Perpustakaan",
+        "explore": "Jelajahi",
+        "playlists": "Daftar Putar",
+        "likes": "Lagu Disukai",
+        "profile": "Profil",
+        "settings": "Pengaturan",
+        "logout": "Keluar",
+        "login": "Masuk",
+        "register": "Daftar",
+        "loading": "Memuat...",
+        "error": "Kesalahan",
+        "success": "Berhasil",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "delete": "Hapus",
+        "edit": "Ubah",
+        "create": "Buat",
+        "back": "Kembali",
+        "next": "Selanjutnya",
+        "previous": "Sebelumnya",
+        "play": "Putar",
+        "pause": "Jeda",
+        "shuffle": "Acak",
+        "repeat": "Ulangi",
+        "volume": "Volume",
+        "mute": "Bisukan"
+    },
+    "home": {
+        "welcome": "Selamat datang kembali",
+        "recentlyPlayed": "Baru Diputar",
+        "trending": "Sedang Trending",
+        "newReleases": "Rilis Terbaru",
+        "topCharts": "Tangga Lagu",
+        "recommendations": "Rekomendasi Untukmu",
+        "genres": "Jelajahi berdasarkan Genre"
+    },
+    "search": {
+        "placeholder": "Apa yang ingin kamu dengarkan?",
+        "results": "{{count}} hasil",
+        "noResults": "Tidak ada hasil untuk \"{{query}}\"",
+        "filters": "Filter",
+        "sortBy": "Urutkan",
+        "genre": "Genre",
+        "duration": "Durasi",
+        "allGenres": "Semua Genre"
+    },
+    "player": {
+        "nowPlaying": "Sedang Diputar",
+        "queue": "Antrian",
+        "lyrics": "Lirik",
+        "addToPlaylist": "Tambah ke Playlist",
+        "share": "Bagikan",
+        "like": "Suka",
+        "unlike": "Batal Suka"
+    },
+    "playlist": {
+        "create": "Buat Playlist",
+        "name": "Nama Playlist",
+        "description": "Deskripsi",
+        "songs": "{{count}} lagu",
+        "duration": "{{duration}} menit",
+        "empty": "Playlist ini kosong",
+        "addSongs": "Tambah Lagu"
+    },
+    "profile": {
+        "editProfile": "Ubah Profil",
+        "followers": "Pengikut",
+        "following": "Mengikuti",
+        "publicPlaylists": "Playlist Publik",
+        "recentActivity": "Aktivitas Terkini"
+    },
+    "auth": {
+        "email": "Email",
+        "password": "Kata Sandi",
+        "confirmPassword": "Konfirmasi Kata Sandi",
+        "fullName": "Nama Lengkap",
+        "loginTitle": "Selamat Datang Kembali",
+        "loginSubtitle": "Masuk untuk melanjutkan",
+        "registerTitle": "Buat Akun",
+        "registerSubtitle": "Bergabung dengan komunitas musik",
+        "forgotPassword": "Lupa Kata Sandi?",
+        "noAccount": "Belum punya akun?",
+        "hasAccount": "Sudah punya akun?",
+        "signUp": "Daftar",
+        "signIn": "Masuk"
+    },
+    "premium": {
+        "title": "Jadi Premium",
+        "subtitle": "Buka seluruh fitur Music Platform",
+        "free": "Gratis",
+        "premium": "Premium",
+        "premiumPlus": "Premium+",
+        "currentPlan": "Paket Saat Ini",
+        "subscribe": "Berlangganan Sekarang",
+        "features": {
+            "noAds": "Tanpa Iklan",
+            "offlineDownload": "Download Offline",
+            "highQuality": "Audio Kualitas Tinggi",
+            "unlimitedPlaylists": "Playlist Tak Terbatas"
+        }
+    },
+    "notifications": {
+        "title": "Notifikasi",
+        "markAllRead": "Tandai semua sudah dibaca",
+        "noNotifications": "Belum ada notifikasi",
+        "newFollower": "mulai mengikuti kamu",
+        "newLike": "menyukai playlistmu",
+        "newComment": "berkomentar di lagumu"
+    },
+    "comments": {
+        "title": "Komentar",
+        "placeholder": "Tulis komentar...",
+        "post": "Kirim",
+        "reply": "Balas",
+        "delete": "Hapus",
+        "noComments": "Belum ada komentar. Jadilah yang pertama berkomentar!"
+    },
+    "errors": {
+        "generic": "Terjadi kesalahan. Silakan coba lagi.",
+        "network": "Kesalahan jaringan. Periksa koneksi internet.",
+        "unauthorized": "Silakan masuk untuk melanjutkan.",
+        "notFound": "Sumber daya yang diminta tidak ditemukan."
+    }
+}

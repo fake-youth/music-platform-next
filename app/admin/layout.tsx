@@ -1,0 +1,19 @@
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
+import { ToastProvider } from "@/components/providers/ToastContext";
+
+export default function AdminLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <ToastProvider>
+            <div className="min-h-screen bg-black text-white flex">
+                <AdminSidebar />
+                <main className="flex-1 ml-64 p-8 bg-zinc-950/50">
+                    {children}
+                </main>
+            </div>
+        </ToastProvider>
+    );
+}

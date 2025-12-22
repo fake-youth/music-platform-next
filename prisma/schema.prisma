@@ -1,0 +1,200 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id          String       @id @default(uuid())
+  email       String       @unique
+  password    String
+  role        String       @default("USER") // Enum: USER, ADMIN, SUPER_ADMIN
+  isPremium   Boolean      @default(false)
+  locale      String       @default("id") // en, id
+  
+  profile     Profile?
+  playlists   Playlist[]
+  likes       Like[]
+  playHistory PlayHistory[]
+  comments    Comment[]
+  followers   Follow[]     @relation("Following")
+  following   Follow[]     @relation("Followers")
+  notifications Notification[]
+  subscription Subscription?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Profile {
+  id        String  @id @default(uuid())
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName  String?
+  gender    String? // Enum: MALE, FEMALE, OTHER...
+  avatarUrl String?
+  bio       String?
+}
+
+model Artist {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  bio         String?
+  avatarUrl   String?
+  coverUrl    String?
+  verified    Boolean  @default(false)
+  songs       Song[]
+  albums      Album[]
+  
+  createdAt   DateTime @default(now())
+}
+
+model Album {
+  id          String   @id @default(uuid())
+  title       String
+  artistId    String
+  artist      Artist   @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  coverUrl    String?
+  releaseDate DateTime?
+  songs       Song[]
+  
+  createdAt   DateTime @default(now())
+}
+
+model Song {
+  id          String   @id @default(uuid())
+  title       String
+  artistId    String?
+  artist      Artist?  @relation(fields: [artistId], references: [id])
+  artistName  String   // Fallback for songs without artist entity
+  albumId     String?
+  album       Album?   @relation(fields: [albumId], references: [id])
+  audioUrl    String
+  coverUrl    String?
+  duration    Int      // in seconds
+  genreId     String
+  genre       Genre    @relation(fields: [genreId], references: [id])
+  likes       Like[]
+  playlists   PlaylistSong[]
+  playHistory PlayHistory[]
+  comments    Comment[]
+  playCount   Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+}
+
+model Genre {
+  id    String @id @default(uuid())
+  name  String @unique
+  songs Song[]
+}
+
+model Playlist {
+  id        String   @id @default(uuid())
+  title     String
+  creatorId String?  
+  creator   User?    @relation(fields: [creatorId], references: [id])
+  isGlobal  Boolean  @default(false) 
+  coverUrl  String?
+  songs     PlaylistSong[]
+  
+  createdAt DateTime @default(now())
+}
+
+model PlaylistSong {
+  playlistId String
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  songId     String
+  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  addedAt    DateTime @default(now())
+
+  @@id([playlistId, songId])
+}
+
+model Like {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  songId String
+  song   Song   @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@id([userId, songId])
+}
+
+model PlayHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  songId    String
+  song      Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  playedAt  DateTime @default(now())
+
+  @@index([userId, playedAt])
+  @@index([songId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  songId    String
+  song      Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  parentId  String?  // For nested comments
+  parent    Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies   Comment[] @relation("CommentReplies")
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([songId, createdAt])
+}
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  follower    User     @relation("Followers", fields: [followerId], references: [id], onDelete: Cascade)
+  followingId String
+  following   User     @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime @default(now())
+  
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // FOLLOW, LIKE, COMMENT, NEW_SONG, SYSTEM
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId, isRead, createdAt])
+}
+
+model Subscription {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan          String   // FREE, PREMIUM, PREMIUM_PLUS
+  status        String   // ACTIVE, CANCELLED, EXPIRED
+  startDate     DateTime @default(now())
+  endDate       DateTime?
+  paymentMethod String?
+  transactionId String?
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
