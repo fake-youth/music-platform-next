@@ -60,8 +60,12 @@ export async function DELETE(request: Request) {
         });
 
         return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Delete Genre Error:", error);
+        const err = error as { code?: string };
+        if (err.code === 'P2003') {
+            return NextResponse.json({ error: 'Cannot delete genre because it is used by songs' }, { status: 400 });
+        }
         return NextResponse.json({ error: 'Failed to delete genre' }, { status: 500 });
     }
 }

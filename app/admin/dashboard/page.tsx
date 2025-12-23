@@ -20,17 +20,17 @@ interface AdminStats {
 
 export default function AdminDashboardPage() {
     const [stats, setStats] = useState<AdminStats | null>(null);
-    const [recentUsers, setRecentUsers] = useState<unknown[]>([]);
+    const [recentSongs, setRecentSongs] = useState<unknown[]>([]); // New state
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         Promise.all([
             fetch('/api/stats').then(res => res.json()),
-            fetch('/api/stats/recent-users?limit=5').then(res => res.json())
+            fetch('/api/songs?limit=5').then(res => res.json()) // Fetch recent songs
         ])
-            .then(([statsData, usersData]: [AdminStats, unknown[]]) => {
+            .then(([statsData, songsData]: [AdminStats, unknown[]]) => {
                 setStats(statsData);
-                setRecentUsers(Array.isArray(usersData) ? usersData : []);
+                setRecentSongs(Array.isArray(songsData) ? songsData.slice(0, 5) : []);
                 setLoading(false);
             })
             .catch((err: unknown) => {
@@ -90,17 +90,32 @@ export default function AdminDashboardPage() {
                 </div>
 
                 <div className="bg-zinc-900/50 rounded-xl p-6 border border-white/5">
-                    <h3 className="text-lg font-semibold mb-4">Latest Insights</h3>
-                    <div className="space-y-4">
-                        <div className="p-4 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-sm text-zinc-400">Total Playtime</p>
-                            <h4 className="text-xl font-bold text-white mt-1">{(stats?.summary?.totalSongs || 0) * 3} mins</h4>
+                    <h3 className="text-lg font-semibold mb-4">Recently Added Songs</h3>
+                    {recentSongs.length === 0 ? (
+                        <div className="text-center py-6 text-zinc-500">No songs added yet.</div>
+                    ) : (
+                        <div className="space-y-3">
+                            {recentSongs.map((song: any) => (
+                                <div key={song.id} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg group transition-colors">
+                                    <div className="size-10 rounded bg-zinc-800 flex-shrink-0 overflow-hidden relative">
+                                        {song.coverUrl ? (
+                                            <img src={song.coverUrl} className="size-full object-cover" alt="" />
+                                        ) : (
+                                            <div className="size-full flex items-center justify-center text-zinc-600"><Music size={16} /></div>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-medium text-white text-sm truncate">{song.title}</p>
+                                        <p className="text-xs text-zinc-400 truncate">{song.artistName}</p>
+                                    </div>
+                                    <span className="text-xs text-zinc-500">{new Date(song.createdAt).toLocaleDateString()}</span>
+                                </div>
+                            ))}
                         </div>
-                        <div className="p-4 bg-white/5 rounded-lg border border-white/5">
-                            <p className="text-sm text-zinc-400">Popular Genre</p>
-                            <h4 className="text-xl font-bold text-white mt-1">Pop Music</h4>
-                        </div>
-                    </div>
+                    )}
+                    <Link href="/admin/songs" className="block mt-4 text-sm text-[#00e5ff] hover:text-[#00e5ff]/80 text-center">
+                        View all songs →
+                    </Link>
                 </div>
             </div>
         </div>

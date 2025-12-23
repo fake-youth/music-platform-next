@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Users, Settings, LogOut, Shield } from "lucide-react";
+import { LayoutDashboard, Users, Settings, LogOut, Shield, Music, Disc, Mic2, MessageSquare, ShieldAlert } from "lucide-react";
 
 export function SuperAdminSidebar() {
     const pathname = usePathname();
@@ -26,9 +26,18 @@ export function SuperAdminSidebar() {
             <nav className="flex-1 px-4 space-y-1">
                 <NavItem icon={LayoutDashboard} label="Dashboard" href="/super-admin/dashboard" active={pathname?.includes("/dashboard")} />
                 <NavItem icon={Users} label="User Management" href="/super-admin/users" active={pathname?.includes("/users")} />
+
+                <div className="pt-4 pb-2 px-2">
+                    <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Content Control</p>
+                </div>
+                <NavItem icon={Music} label="Global Songs" href="/admin/songs" active={pathname?.includes("/songs")} />
+                <NavItem icon={Disc} label="Global Albums" href="/admin/albums" active={pathname?.includes("/albums")} />
+                <NavItem icon={Mic2} label="Global Artists" href="/admin/artists" active={pathname?.includes("/artists")} />
+                <NavItem icon={MessageSquare} label="All Comments" href="/admin/comments" active={pathname?.includes("/comments")} />
             </nav>
 
             <div className="p-4 border-t border-white/5 space-y-1">
+                <NavItem icon={ShieldAlert} label="Audit Logs" href="/super-admin/logs" active={pathname?.includes("/logs")} />
                 <NavItem icon={Settings} label="System Settings" href="/super-admin/settings" active={pathname?.includes("/settings")} />
                 <button
                     onClick={handleLogout}

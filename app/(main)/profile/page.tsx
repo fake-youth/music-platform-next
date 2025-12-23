@@ -36,9 +36,56 @@ export default function ProfilePage() {
     const [editForm, setEditForm] = useState({ fullName: '', gender: '' });
     const [updating, setUpdating] = useState(false);
     const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+    // Password Change State
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+    const [passwordForm, setPasswordForm] = useState({ current: '', new: '', confirm: '' });
+    const [changingPassword, setChangingPassword] = useState(false);
+
     const avatarInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
     const { showToast } = useToast();
+
+    const handleChangePassword = async () => {
+        if (!passwordForm.current || !passwordForm.new || !passwordForm.confirm) {
+            showToast('All fields are required', 'error');
+            return;
+        }
+        if (passwordForm.new !== passwordForm.confirm) {
+            showToast('New passwords do not match', 'error');
+            return;
+        }
+        if (passwordForm.new.length < 6) {
+            showToast('Password must be at least 6 characters', 'error');
+            return;
+        }
+
+        setChangingPassword(true);
+        try {
+            const userId = getUserIdFromCookie();
+            const res = await fetch('/api/auth/change-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId,
+                    currentPassword: passwordForm.current,
+                    newPassword: passwordForm.new
+                })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                showToast('Password changed successfully', 'success');
+                setIsPasswordModalOpen(false);
+                setPasswordForm({ current: '', new: '', confirm: '' });
+            } else {
+                showToast(data.error || 'Failed to change password', 'error');
+            }
+        } catch (e) {
+            showToast('Failed to change password', 'error');
+        } finally {
+            setChangingPassword(false);
+        }
+    };
 
     useEffect(() => {
         const userId = getUserIdFromCookie();
@@ -371,6 +418,14 @@ export default function ProfilePage() {
                     >
                         <LogOut size={16} /> Logout
                     </button>
+                    {!editing && (
+                        <button
+                            onClick={() => setIsPasswordModalOpen(true)}
+                            className="px-4 py-2 text-sm text-zinc-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2"
+                        >
+                            Change Password
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -447,6 +502,52 @@ export default function ProfilePage() {
                     </div>
                 )}
             </div>
+            {/* Password Modal */}
+            {isPasswordModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-sm p-6 space-y-4 shadow-2xl">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-bold">Change Password</h2>
+                            <button onClick={() => setIsPasswordModalOpen(false)} className="text-zinc-400 hover:text-white">
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="space-y-3">
+                            <input
+                                type="password"
+                                placeholder="Current Password"
+                                value={passwordForm.current}
+                                onChange={(e) => setPasswordForm({ ...passwordForm, current: e.target.value })}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#00e5ff] outline-none"
+                            />
+                            <input
+                                type="password"
+                                placeholder="New Password"
+                                value={passwordForm.new}
+                                onChange={(e) => setPasswordForm({ ...passwordForm, new: e.target.value })}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#00e5ff] outline-none"
+                            />
+                            <input
+                                type="password"
+                                placeholder="Confirm New Password"
+                                value={passwordForm.confirm}
+                                onChange={(e) => setPasswordForm({ ...passwordForm, confirm: e.target.value })}
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:border-[#00e5ff] outline-none"
+                            />
+                        </div>
+                        <div className="flex justify-end gap-3 pt-2">
+                            <button onClick={() => setIsPasswordModalOpen(false)} className="px-4 py-2 text-sm font-medium text-zinc-400 hover:text-white">Cancel</button>
+                            <button
+                                onClick={handleChangePassword}
+                                disabled={changingPassword}
+                                className="px-4 py-2 text-sm font-medium bg-[#00e5ff] hover:bg-[#00e5ff]/80 text-black rounded-lg flex items-center gap-2 disabled:opacity-50"
+                            >
+                                {changingPassword && <Loader2 size={14} className="animate-spin" />} Update Password
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

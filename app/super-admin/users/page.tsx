@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trash2, UserX, UserCheck, Loader2 } from "lucide-react";
+import { Trash2, UserX, UserCheck, Loader2, Search } from "lucide-react";
 import { useToast } from "@/components/providers/ToastContext";
 
 interface User {
@@ -15,6 +15,7 @@ interface User {
 export default function UsersPage() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
     const { showToast } = useToast();
 
     useEffect(() => {
@@ -92,12 +93,31 @@ export default function UsersPage() {
         }
     }
 
+    const filteredUsers = users.filter(user =>
+        (user.fullName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (user.email || '').toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold">User Management</h1>
                     <p className="text-zinc-400">Control user roles and access.</p>
+                </div>
+            </div>
+
+            {/* Search */}
+            <div className="flex gap-4 bg-zinc-900/50 p-4 rounded-xl border border-white/5">
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
+                    <input
+                        type="text"
+                        placeholder="Search users by name or email..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-black/50 border border-white/10 rounded-lg py-2 pl-10 pr-4 text-sm text-white focus:outline-none focus:border-[#00e5ff] transition-colors"
+                    />
                 </div>
             </div>
 
@@ -115,13 +135,13 @@ export default function UsersPage() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {users.length === 0 ? (
+                            {filteredUsers.length === 0 ? (
                                 <tr><td colSpan={4} className="px-6 py-8 text-center text-zinc-500">No users found.</td></tr>
-                            ) : users.map((user) => (
+                            ) : filteredUsers.map((user) => (
                                 <tr key={user.id} className="hover:bg-white/5 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex flex-col">
-                                            <span className="font-medium text-white">{user.fullName}</span>
+                                            <span className="font-medium text-white">{user.fullName || 'No Name'}</span>
                                             <span className="text-zinc-500 text-xs">{user.email}</span>
                                         </div>
                                     </td>
@@ -173,4 +193,3 @@ export default function UsersPage() {
         </div>
     );
 }
-

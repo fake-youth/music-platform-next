@@ -46,3 +46,6 @@ next-env.d.ts
 build_*.txt
 lint_*.txt
 lint_*.json
+
+# media
+/public/uploads

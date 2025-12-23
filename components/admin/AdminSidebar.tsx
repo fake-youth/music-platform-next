@@ -8,6 +8,13 @@ import { LayoutDashboard, Music, Disc, Mic2, MessageSquare, Tags, BarChart3, Log
 export function AdminSidebar() {
     const pathname = usePathname();
     const router = useRouter();
+    const [user, setUser] = React.useState<{ fullName?: string, role?: string, avatarUrl?: string } | null>(null);
+
+    React.useEffect(() => {
+        fetch('/api/auth/me').then(res => res.json()).then(data => {
+            if (data.id) setUser(data);
+        }).catch(console.error);
+    }, []);
 
     const handleLogout = async () => {
         await fetch('/api/auth/logout', { method: 'POST' });
@@ -30,7 +37,28 @@ export function AdminSidebar() {
                 <NavItem icon={BarChart3} label="Analytics" href="/admin/analytics" active={pathname?.includes("/analytics")} />
             </nav>
 
-            <div className="p-4 border-t border-white/5 space-y-1">
+            <div className="p-4 border-t border-white/5 space-y-4">
+                {/* User Profile */}
+                {user && (
+                    <div className="flex items-center gap-3 px-2">
+                        <div className="size-10 rounded-full bg-zinc-800 overflow-hidden flex-shrink-0">
+                            {user.avatarUrl ? (
+                                <img src={user.avatarUrl} alt="" className="size-full object-cover" />
+                            ) : (
+                                <div className="size-full flex items-center justify-center text-zinc-400 font-bold">
+                                    {user.fullName?.[0]?.toUpperCase() || 'A'}
+                                </div>
+                            )}
+                        </div>
+                        <div className="min-w-0">
+                            <p className="text-sm font-medium text-white truncate">{user.fullName || 'Admin'}</p>
+                            <span className="text-xs text-[#00e5ff] bg-[#00e5ff]/10 px-1.5 py-0.5 rounded border border-[#00e5ff]/20">
+                                {user.role}
+                            </span>
+                        </div>
+                    </div>
+                )}
+
                 <button
                     onClick={handleLogout}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-red-400 hover:text-red-300 hover:bg-white/5 w-full transition-colors"

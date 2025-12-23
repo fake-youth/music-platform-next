@@ -2,13 +2,48 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { songSchema } from '@/lib/validations';
 
+import { unlink } from 'fs/promises';
+import { join } from 'path';
+
+import { requireAdmin } from '@/lib/auth';
+
 // DELETE a song
 export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const auth = await requireAdmin();
+        if ('error' in auth) {
+            return NextResponse.json({ error: auth.error }, { status: auth.status });
+        }
+
         const { id } = await params;
+
+        // Get file paths before deletion
+        const song = await prisma.song.findUnique({
+            where: { id },
+            select: { audioUrl: true, coverUrl: true }
+        });
+
+        if (song) {
+            // Helper to delete file if it's local
+            const deleteFile = async (url: string | null) => {
+                if (!url || url.startsWith('http')) return;
+                try {
+                    // url is like '/uploads/audio/xyz.mp3'
+                    // Remove leading slash to join with cwd
+                    const relativePath = url.startsWith('/') ? url.slice(1) : url;
+                    const absolutePath = join(process.cwd(), 'public', relativePath);
+                    await unlink(absolutePath);
+                } catch (e) {
+                    console.warn(`Failed to delete file: ${url}`, e);
+                }
+            };
+
+            await deleteFile(song.audioUrl);
+            await deleteFile(song.coverUrl);
+        }
 
         await prisma.song.delete({
             where: { id }
@@ -51,6 +86,11 @@ export async function PATCH(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const auth = await requireAdmin();
+        if ('error' in auth) {
+            return NextResponse.json({ error: auth.error }, { status: auth.status });
+        }
+
         const { id } = await params;
         const body = await request.json();
 

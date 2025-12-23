@@ -135,7 +135,7 @@ export function MusicPlayer() {
                 </div>
                 <div className="flex flex-col min-w-0">
                     <span className="text-white font-medium text-xs md:text-sm truncate">{currentSong.title}</span>
-                    <span className="text-zinc-400 text-[10px] md:text-xs truncate">{currentSong.artist}</span>
+                    <span className="text-zinc-400 text-[10px] md:text-xs truncate">{currentSong.artistName}</span>
                 </div>
                 <button onClick={handleLike} className={`ml-1 md:ml-2 transition-colors hidden sm:block ${liked ? 'text-rose-500' : 'text-zinc-400 hover:text-rose-500'}`}>
                     <Heart size={16} fill={liked ? 'currentColor' : 'none'} />

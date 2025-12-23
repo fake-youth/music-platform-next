@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { loginSchema } from '@/lib/validations';
+import bcrypt from 'bcryptjs';
 
 export async function POST(request: Request) {
     try {
@@ -16,36 +17,39 @@ export async function POST(request: Request) {
 
         const { email, password } = validation.data;
 
-        let role = 'USER';
-        if (email.includes('admin')) role = 'ADMIN';
-        if (email.includes('super')) role = 'SUPER_ADMIN';
-
-        // Upsert User into Database so they appear in User Management
-        // In a real app, you'd verify password here.
-        let user = await prisma.user.findUnique({
+        // Find user
+        const user = await prisma.user.findUnique({
             where: { email }
         });
 
         if (!user) {
-            user = await prisma.user.create({
-                data: {
-                    email,
-                    password: 'hashed_password_placeholder', // Mock
-                    role,
-                    profile: {
-                        create: {
-                            fullName: email.split('@')[0],
-                            gender: 'OTHER'
-                        }
-                    }
-                }
-            });
-        } else {
-            // Update role if changed via email pattern (for demo purposes)
-            // or keep existing role from DB? 
-            // Let's keep existing role from DB to allow Admin Panel changes to persist!
-            role = user.role;
+            return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
         }
+
+        // Verify password
+        // If user was created with mock auth (previous versions), password might be plain text or placeholder.
+        // We should check if it looks like a hash (starts with $2a$ etc), if not, maybe try plain compare for backward compat?
+        // No, let's enforce security. If it's a legacy account, they might need to reset or re-register.
+        // But for development convenience if we have 'hashed_password_placeholder', we can fail.
+
+        let isValid = false;
+        if (user.password.startsWith('$2')) {
+            isValid = await bcrypt.compare(password, user.password);
+        } else {
+            // Fallback for previous unhashed passwords (for dev transition only)
+            isValid = password === user.password;
+        }
+
+        if (!isValid) {
+            return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
+        }
+
+        // Check if banned
+        if (user.role === 'BANNED') {
+            return NextResponse.json({ error: 'Account is banned' }, { status: 403 });
+        }
+
+        const role = user.role;
 
         // Create response
         const response = NextResponse.json({ success: true, role, userId: user.id });

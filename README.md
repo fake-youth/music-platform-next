@@ -26,7 +26,7 @@ A modern, full-featured music streaming application built with Next.js, Prisma, 
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/yourusername/music-platform-next.git
+    git clone https://github.com/fake-youth/music-platform-next.git
     cd music-platform-next
     ```
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logAction } from '@/lib/audit';
 
 // GET - Get a single user by ID
 export async function GET(
@@ -27,12 +28,19 @@ export async function GET(
     }
 }
 
+import { requireSuperAdmin } from '@/lib/auth';
+
 // POST - Ban/Unban a user
 export async function POST(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const auth = await requireSuperAdmin();
+        if ('error' in auth) {
+            return NextResponse.json({ error: auth.error }, { status: auth.status });
+        }
+
         const { id } = await params;
         const body = await request.json();
         const { banned } = body;
@@ -43,6 +51,13 @@ export async function POST(
                 role: banned ? 'BANNED' : 'USER'
             }
         });
+
+        await logAction(
+            banned ? 'BAN_USER' : 'UNBAN_USER',
+            'User',
+            id,
+            `User ${user.email} was ${banned ? 'banned' : 'unbanned'}`
+        );
 
         return NextResponse.json({
             success: true,
@@ -61,12 +76,19 @@ export async function DELETE(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const auth = await requireSuperAdmin();
+        if ('error' in auth) {
+            return NextResponse.json({ error: auth.error }, { status: auth.status });
+        }
+
         const { id } = await params;
 
         // Delete user's profile first (cascade)
         await prisma.profile.deleteMany({ where: { userId: id } });
         await prisma.like.deleteMany({ where: { userId: id } });
         await prisma.user.delete({ where: { id } });
+
+        await logAction('DELETE_USER', 'User', id, 'Deleted user account');
 
         return NextResponse.json({ success: true, message: 'User deleted' });
     } catch (error) {

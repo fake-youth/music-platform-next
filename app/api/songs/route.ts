@@ -18,8 +18,15 @@ export async function GET() {
     }
 }
 
+import { requireAdmin } from '@/lib/auth';
+
 export async function POST(request: Request) {
     try {
+        const auth = await requireAdmin();
+        if ('error' in auth) {
+            return NextResponse.json({ error: auth.error }, { status: auth.status });
+        }
+
         const body = await request.json();
         const { title, artist, audioUrl, coverUrl, duration, genreId: bodyGenreId } = body;
         let genreId = bodyGenreId;

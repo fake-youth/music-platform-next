@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logAction } from '@/lib/audit';
 
 export async function GET() {
     try {
@@ -37,6 +38,8 @@ export async function PATCH(request: Request) {
             where: { id },
             data: { role },
         });
+
+        await logAction('UPDATE_ROLE', 'User', id, `Updated role to ${role}`);
 
         return NextResponse.json(updatedUser);
     } catch (error) {

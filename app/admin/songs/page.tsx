@@ -89,8 +89,21 @@ export default function SongsPage() {
             const data = await res.json();
             if (res.ok && data.url) {
                 if (type === 'audio') {
-                    setNewSong(prev => ({ ...prev, audioUrl: data.url }));
-                    showToast("Audio uploaded successfully", "success");
+                    // Calculate duration
+                    const audio = new Audio(data.url);
+                    audio.onloadedmetadata = () => {
+                        setNewSong(prev => ({
+                            ...prev,
+                            audioUrl: data.url,
+                            duration: Math.round(audio.duration).toString()
+                        }));
+                        showToast("Audio uploaded & duration set", "success");
+                    };
+                    // Fallback if metadata fails
+                    audio.onerror = () => {
+                        setNewSong(prev => ({ ...prev, audioUrl: data.url }));
+                        showToast("Audio uploaded", "success");
+                    }
                 } else {
                     setNewSong(prev => ({ ...prev, coverUrl: data.url }));
                     showToast("Cover image uploaded successfully", "success");
