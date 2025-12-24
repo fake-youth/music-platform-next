@@ -7,6 +7,7 @@ import { formatDuration, getUserIdFromCookie } from "@/lib/utils";
 import { useToast } from "@/components/providers/ToastContext";
 import { QueueDrawer } from "@/components/player/QueueDrawer";
 import { AudioVisualizer } from "@/components/player/AudioVisualizer";
+import { LyricsView } from "@/components/player/LyricsView";
 import Link from "next/link";
 
 export function MusicPlayer() {
@@ -18,6 +19,7 @@ export function MusicPlayer() {
     const [showPaywall, setShowPaywall] = useState(false);
     const [liked, setLiked] = useState(false);
     const [showQueue, setShowQueue] = useState(false);
+    const [showLyrics, setShowLyrics] = useState(false);
     const { showToast } = useToast();
 
     useEffect(() => {
@@ -195,8 +197,9 @@ export function MusicPlayer() {
             {/* Volume & Extras - Responsive */}
             <div className="flex items-center justify-end gap-2 md:gap-4 w-[25%] md:w-[30%]">
                 <button
-                    className="text-zinc-400 hover:text-white transition-colors hidden lg:block"
-                    title="Lyrics (Coming Soon)"
+                    onClick={() => setShowLyrics(!showLyrics)}
+                    className={`transition-colors hidden lg:block ${showLyrics ? 'text-[#00e5ff]' : 'text-zinc-400 hover:text-white'}`}
+                    title="Lyrics"
                 >
                     <Mic2 size={16} />
                 </button>
@@ -222,6 +225,9 @@ export function MusicPlayer() {
 
             {/* Queue Drawer */}
             <QueueDrawer isOpen={showQueue} onClose={() => setShowQueue(false)} />
+
+            {/* Lyrics View */}
+            <LyricsView isOpen={showLyrics} onClose={() => setShowLyrics(false)} />
 
         </div>
     );

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Home, Search, Library, PlusSquare, Heart, Globe, Disc, Music2, Menu, X, LogOut, LogIn } from "lucide-react";
+import { Home, Search, Library, PlusSquare, Heart, Globe, Disc, Music2, Menu, X, LogOut, LogIn, User } from "lucide-react";
 
 export function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -87,6 +87,7 @@ export function Sidebar() {
                         <div className="space-y-1">
                             <NavItem icon={Globe} label="Notifications" href="/notifications" onClick={() => setIsOpen(false)} />
                             <NavItem icon={Music2} label="Premium" href="/premium" onClick={() => setIsOpen(false)} />
+                            <NavItem icon={User} label="Profile" href="/profile" onClick={() => setIsOpen(false)} />
                         </div>
                     </div>
                 </nav>

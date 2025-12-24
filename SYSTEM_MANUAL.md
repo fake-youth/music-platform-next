@@ -7,6 +7,7 @@ This is a fully featured modern music streaming platform built with Next.js 14, 
 
 ## 2. Core Features (User Side)
 - **Music Playback**: Persistent player, continuous playback, skip/prev/shuffle/repeat.
+- **Lyrics**: View real-time (static) lyrics for supported songs directly in the player.
 - **Discovery**:
   - **Explore**: Trending songs, new releases.
   - **Search**: Filter by Song, Artist, Album, Genre, Duration.
@@ -68,3 +69,8 @@ Designed for System Owners.
 - **Email Service**: Integration with SendGrid/SMTP for Forgot Password.
 - **Cloud Storage**: Migrate `public/uploads` to AWS S3/Cloudinary for scalability.
 - **Payment Gateway**: Integrate Midtrans/Stripe for real payments.
+
+## 7. Concept & Business Validation
+- **Current Model**: "Label / Curator Platform". You (Admin) control all content. Similar to early iTunes or specialized niche streaming apps.
+- **Spotify Model**: "Aggregator Platform". Spotify does NOT allow direct uploads. Artists use distributors (DistroKid, TuneCore).
+- **Recommendation**: For MVP, the current "Manual Upload" is best to maintain quality control. In V2, you can build an "Artist Portal".

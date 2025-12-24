@@ -104,12 +104,14 @@ export async function PATCH(
         const updateData: Record<string, string | number | null> = {};
         if (body.title !== undefined) updateData.title = body.title.trim();
         if (body.artist !== undefined) updateData.artistName = body.artist.trim();
+        if (body.lyrics !== undefined) updateData.lyrics = body.lyrics;
         if (body.genreId !== undefined) updateData.genreId = body.genreId;
 
         // Validate with schema using existing values for missing fields
         const validation = songSchema.safeParse({
             title: updateData.title || existingSong.title,
             artist: (updateData.artistName as string) || existingSong.artistName,
+            lyrics: body.lyrics !== undefined ? body.lyrics : existingSong.lyrics,
             audioUrl: existingSong.audioUrl,
             coverUrl: existingSong.coverUrl || '',
             duration: existingSong.duration,

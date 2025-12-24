@@ -13,6 +13,7 @@ interface Song {
     genre: { name: string; id: string } | null;
     genreId?: string;
     coverUrl: string | null;
+    lyrics?: string | null;
 }
 
 interface Genre {
@@ -24,12 +25,12 @@ export default function SongsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [songs, setSongs] = useState<Song[]>([]);
     const [loading, setLoading] = useState(true);
-    const [newSong, setNewSong] = useState({ title: '', artist: '', genreId: '', duration: '200', audioUrl: '', coverUrl: '' });
+    const [newSong, setNewSong] = useState({ title: '', artist: '', genreId: '', duration: '200', audioUrl: '', coverUrl: '', lyrics: '' });
     const [submitting, setSubmitting] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [editingSong, setEditingSong] = useState<Song | null>(null);
-    const [editForm, setEditForm] = useState({ title: '', artist: '', genreId: '' });
+    const [editForm, setEditForm] = useState({ title: '', artist: '', genreId: '', lyrics: '' });
     const [genres, setGenres] = useState<Genre[]>([]);
     const { showToast } = useToast();
 
@@ -134,7 +135,7 @@ export default function SongsPage() {
             if (res.ok) {
                 showToast("Song created successfully", "success");
                 setIsModalOpen(false);
-                setNewSong({ title: '', artist: '', genreId: '', duration: '200', audioUrl: '', coverUrl: '' });
+                setNewSong({ title: '', artist: '', genreId: '', duration: '200', audioUrl: '', coverUrl: '', lyrics: '' });
                 fetchSongs();
             } else {
                 showToast("Failed to create song", "error");
@@ -170,7 +171,7 @@ export default function SongsPage() {
 
     const openEditModal = (song: Song) => {
         setEditingSong(song);
-        setEditForm({ title: song.title, artist: song.artistName, genreId: song.genreId || song.genre?.id || '' });
+        setEditForm({ title: song.title, artist: song.artistName, genreId: song.genreId || song.genre?.id || '', lyrics: song.lyrics || '' });
     };
 
     const handleEdit = async () => {
@@ -182,7 +183,8 @@ export default function SongsPage() {
                 body: JSON.stringify({
                     title: editForm.title,
                     artist: editForm.artist,
-                    genreId: editForm.genreId || undefined
+                    genreId: editForm.genreId || undefined,
+                    lyrics: editForm.lyrics
                 }),
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -275,7 +277,7 @@ export default function SongsPage() {
             {/* Modal Overlay */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-lg p-6 space-y-6 shadow-2xl">
+                    <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-lg p-6 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
                         <h2 className="text-xl font-bold">Upload New Song</h2>
 
                         <div className="space-y-4">
@@ -336,6 +338,15 @@ export default function SongsPage() {
                                     ))}
                                 </select>
                             </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-semibold text-zinc-400 uppercase">Lyrics</label>
+                                <textarea
+                                    value={newSong.lyrics}
+                                    onChange={e => setNewSong({ ...newSong, lyrics: e.target.value })}
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-[#00e5ff] outline-none h-24 resize-none"
+                                    placeholder="Paste lyrics here..."
+                                />
+                            </div>
                         </div>
 
                         <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
@@ -351,7 +362,7 @@ export default function SongsPage() {
             {/* Edit Modal */}
             {editingSong && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-md p-6 space-y-6 shadow-2xl">
+                    <div className="bg-zinc-900 border border-white/10 rounded-xl w-full max-w-md p-6 space-y-6 shadow-2xl max-h-[90vh] overflow-y-auto">
                         <h2 className="text-xl font-bold">Edit Song</h2>
                         <div className="space-y-4">
                             <div className="space-y-1">
@@ -382,6 +393,15 @@ export default function SongsPage() {
                                         <option key={genre.id} value={genre.id}>{genre.name}</option>
                                     ))}
                                 </select>
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs font-semibold text-zinc-400 uppercase">Lyrics</label>
+                                <textarea
+                                    value={editForm.lyrics}
+                                    onChange={e => setEditForm({ ...editForm, lyrics: e.target.value })}
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-3 py-2 text-sm focus:border-[#00e5ff] outline-none h-24 resize-none"
+                                    placeholder="Paste lyrics here..."
+                                />
                             </div>
                         </div>
                         <div className="flex justify-end gap-3 pt-4 border-t border-white/5">

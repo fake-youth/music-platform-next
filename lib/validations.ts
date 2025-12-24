@@ -16,6 +16,7 @@ export const registerSchema = z.object({
 export const songSchema = z.object({
     title: z.string().min(1, 'Title is required').max(200, 'Title too long'),
     artist: z.string().min(1, 'Artist is required').max(200, 'Artist name too long'),
+    lyrics: z.string().optional(),
     audioUrl: z.string().min(1, 'Audio URL required'),
     coverUrl: z.string().optional().or(z.literal('')),
     duration: z.number().int().positive('Duration must be positive'),

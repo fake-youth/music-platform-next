@@ -78,6 +78,7 @@ model Song {
   album       Album?   @relation(fields: [albumId], references: [id])
   audioUrl    String
   coverUrl    String?
+  lyrics      String?  // Text content of lyrics
   duration    Int      // in seconds
   genreId     String
   genre       Genre    @relation(fields: [genreId], references: [id])

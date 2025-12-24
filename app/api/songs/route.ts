@@ -44,6 +44,7 @@ export async function POST(request: Request) {
         const validation = songSchema.safeParse({
             title: title?.trim(),
             artist: artist?.trim(),
+            lyrics: body.lyrics,
             audioUrl,
             coverUrl: coverUrl || '',
             duration: parseInt(duration) || 0,

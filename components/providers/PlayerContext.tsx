@@ -8,6 +8,7 @@ interface Song {
     artistName: string;
     audioUrl: string;
     coverUrl?: string | null;
+    lyrics?: string | null;
     duration: number;
 }
 
