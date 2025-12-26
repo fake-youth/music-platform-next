@@ -35,17 +35,27 @@ A modern, full-featured music streaming application built with Next.js, Prisma, 
     npm install
     ```
 
-3.  **Setup Database**:
+3.  **Setup Environment**:
     ```bash
-    npx prisma db push
+    cp .env.example .env
     ```
 
-4.  **Run Development Server**:
+4.  **Setup Database**:
+    ```bash
+    npx prisma db push
+    npx prisma db seed
+    ```
+    This creates the database and seeds it with default users:
+    - **Super Admin**: `super@music.com` / `super123`
+    - **Admin**: `admin@music.com` / `admin123`
+    - **User**: `user@music.com` / `user123`
+
+5.  **Run Development Server**:
     ```bash
     npm run dev
     ```
 
-5.  **Open Browser**:
+6.  **Open Browser**:
     Navigate to [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
