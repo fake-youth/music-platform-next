@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Play, Clock, Sparkles, TrendingUp, ChevronRight, Music, Plus } from "lucide-react";
+import { Play, Clock, Sparkles, TrendingUp, ChevronRight, Music, Plus, Bell } from "lucide-react";
 import { usePlayer } from "@/components/providers/PlayerContext";
 import { AddToPlaylistMenu } from "@/components/playlist/AddToPlaylistMenu";
+import { useToast } from "@/components/providers/ToastContext";
 import Link from "next/link";
 
 interface Song {
@@ -21,6 +22,7 @@ export default function HomePage() {
     const [loading, setLoading] = useState(true);
     const [showPlaylistMenu, setShowPlaylistMenu] = useState<string | null>(null);
     const { playSong, setPlaylist, currentSong, isPlaying } = usePlayer();
+    const { showToast } = useToast();
 
     useEffect(() => {
         fetch('/api/songs')
@@ -96,9 +98,9 @@ export default function HomePage() {
                             </div>
                             Play Now
                         </button>
-                        <button className="px-6 py-4 rounded-full font-medium text-white border border-white/20 hover:border-white/50 hover:bg-white/10 transition-all backdrop-blur-xl">
+                        <Link href="/explore" className="px-6 py-4 rounded-full font-medium text-white border border-white/20 hover:border-white/50 hover:bg-white/10 transition-all backdrop-blur-xl">
                             Explore
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -232,7 +234,11 @@ export default function HomePage() {
                     <span className="text-xs font-bold uppercase tracking-widest text-[#00e5ff]">Coming Soon</span>
                     <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">Live Listening Rooms</h2>
                     <p className="text-zinc-400 max-w-md mb-6">Listen together with friends in real-time. Share your favorite songs and discover new music together.</p>
-                    <button className="px-6 py-3 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all font-medium">
+                    <button
+                        onClick={() => showToast('You will be notified when Live Rooms launch!', 'success')}
+                        className="px-6 py-3 rounded-full bg-white/10 border border-white/20 hover:bg-white/20 transition-all font-medium flex items-center gap-2"
+                    >
+                        <Bell size={16} />
                         Get Notified
                     </button>
                 </div>

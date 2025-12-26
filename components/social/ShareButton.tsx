@@ -90,7 +90,7 @@ export default function ShareButton({ title, url, description = '' }: ShareButto
                     url: shareUrl,
                 })
                 setIsOpen(false)
-            } catch (error) {
+            } catch {
                 // User cancelled or error
                 console.log('Share cancelled')
             }

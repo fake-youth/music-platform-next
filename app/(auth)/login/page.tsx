@@ -88,7 +88,7 @@ export default function LoginPage() {
                         <input type="checkbox" className="rounded bg-black/40 border-white/10 text-[#00e5ff] focus:ring-0" />
                         Remember me
                     </label>
-                    <Link href="#" className="hover:text-[#00e5ff] transition-colors">Forgot password?</Link>
+                    <Link href="/forgot-password" className="hover:text-[#00e5ff] transition-colors">Forgot password?</Link>
                 </div>
 
                 <Button disabled={loading} className="w-full mt-6 bg-[#00e5ff] hover:bg-[#00e5ff]/80 text-black font-semibold py-6 text-base shadow-lg shadow-[#00e5ff]/20 group">

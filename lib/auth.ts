@@ -1,6 +1,5 @@
 import { cookies } from 'next/headers';
 import { prisma } from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 
 export async function getCurrentUser() {
     // In strict mode, we should match session/token.

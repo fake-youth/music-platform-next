@@ -18,9 +18,17 @@ interface AdminStats {
     };
 }
 
+interface Song {
+    id: string;
+    title: string;
+    artistName: string;
+    coverUrl?: string | null;
+    createdAt: string;
+}
+
 export default function AdminDashboardPage() {
     const [stats, setStats] = useState<AdminStats | null>(null);
-    const [recentSongs, setRecentSongs] = useState<unknown[]>([]); // New state
+    const [recentSongs, setRecentSongs] = useState<Song[]>([]); // New state
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -28,7 +36,7 @@ export default function AdminDashboardPage() {
             fetch('/api/stats').then(res => res.json()),
             fetch('/api/songs?limit=5').then(res => res.json()) // Fetch recent songs
         ])
-            .then(([statsData, songsData]: [AdminStats, unknown[]]) => {
+            .then(([statsData, songsData]: [AdminStats, Song[]]) => {
                 setStats(statsData);
                 setRecentSongs(Array.isArray(songsData) ? songsData.slice(0, 5) : []);
                 setLoading(false);
@@ -95,7 +103,7 @@ export default function AdminDashboardPage() {
                         <div className="text-center py-6 text-zinc-500">No songs added yet.</div>
                     ) : (
                         <div className="space-y-3">
-                            {recentSongs.map((song: any) => (
+                            {recentSongs.map((song) => (
                                 <div key={song.id} className="flex items-center gap-3 p-2 hover:bg-white/5 rounded-lg group transition-colors">
                                     <div className="size-10 rounded bg-zinc-800 flex-shrink-0 overflow-hidden relative">
                                         {song.coverUrl ? (

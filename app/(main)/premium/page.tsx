@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { Crown, Check, Sparkles, Music, Download, Zap, Shield, Star } from 'lucide-react'
+import { useToast } from '@/components/providers/ToastContext'
 
 interface Plan {
     id: string
@@ -72,6 +73,7 @@ export default function PremiumPage() {
     const [selectedPlan, setSelectedPlan] = useState<string>('premium')
     const [loading, setLoading] = useState(false)
     const [currentPlan, setCurrentPlan] = useState<string>('free')
+    const { showToast } = useToast()
 
     useEffect(() => {
         checkCurrentPlan()
@@ -104,8 +106,7 @@ export default function PremiumPage() {
 
             if (res.ok) {
                 setCurrentPlan(planId)
-                // In real app, redirect to payment gateway
-                alert('Subscription updated! In production, this would redirect to payment.')
+                showToast(`Upgraded to ${planId.charAt(0).toUpperCase() + planId.slice(1)}! In production, this would redirect to payment.`, 'success')
             }
         } catch (error) {
             console.error('Failed to subscribe:', error)
@@ -156,10 +157,10 @@ export default function PremiumPage() {
                             key={plan.id}
                             onClick={() => setSelectedPlan(plan.id)}
                             className={`relative p-6 rounded-2xl cursor-pointer transition-all duration-300 ${plan.highlighted
-                                    ? 'bg-gradient-to-br from-purple-600/30 to-pink-600/30 border-2 border-purple-500 scale-105 shadow-xl shadow-purple-500/20'
-                                    : selectedPlan === plan.id
-                                        ? 'bg-gray-800/50 border-2 border-purple-500/50'
-                                        : 'bg-gray-800/30 border border-gray-700/50 hover:border-gray-600'
+                                ? 'bg-gradient-to-br from-purple-600/30 to-pink-600/30 border-2 border-purple-500 scale-105 shadow-xl shadow-purple-500/20'
+                                : selectedPlan === plan.id
+                                    ? 'bg-gray-800/50 border-2 border-purple-500/50'
+                                    : 'bg-gray-800/30 border border-gray-700/50 hover:border-gray-600'
                                 }`}
                         >
                             {plan.highlighted && (
@@ -176,8 +177,8 @@ export default function PremiumPage() {
 
                             <div className="mb-6">
                                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 ${plan.highlighted
-                                        ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white'
-                                        : 'bg-gray-700 text-gray-300'
+                                    ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white'
+                                    : 'bg-gray-700 text-gray-300'
                                     }`}>
                                     {plan.icon}
                                 </div>
@@ -209,10 +210,10 @@ export default function PremiumPage() {
                                 }}
                                 disabled={loading || currentPlan === plan.id}
                                 className={`w-full py-3 rounded-xl font-semibold transition-all ${currentPlan === plan.id
-                                        ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                                        : plan.highlighted
-                                            ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700'
-                                            : 'bg-gray-700 text-white hover:bg-gray-600'
+                                    ? 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                                    : plan.highlighted
+                                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700'
+                                        : 'bg-gray-700 text-white hover:bg-gray-600'
                                     }`}
                             >
                                 {currentPlan === plan.id

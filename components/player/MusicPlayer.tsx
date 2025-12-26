@@ -80,7 +80,7 @@ export function MusicPlayer() {
         const seekTime = (percent / 100) * duration;
 
         if (isGuest && seekTime > 30) {
-            alert("Guests can only listen to 30 second previews.");
+            showToast('Guests can only listen to 30 second previews. Please login for full access!', 'info');
             return;
         }
 
